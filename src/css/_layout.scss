@@ -1,0 +1,111 @@
+
+// MARK: Variables
+:root {
+  --u-gap-xs: 4px;
+  --u-gap-sm: 8px;
+  --u-gap-md: 16px;
+  --u-gap-lg: 24px;
+  --u-gap-xl: 40px;
+}
+
+$gaps: (
+  0: 0,
+  xs: var(--u-gap-xs),
+  sm: var(--u-gap-sm),
+  md: var(--u-gap-md),
+  lg: var(--u-gap-lg),
+  xl: var(--u-gap-xl),
+);
+
+$spacing-rules: (
+  // GAP
+  gap:   (gap: gap),
+
+  // PADDING
+  p:     (padding: padding),
+  p-h:   (padding-left: padding, padding-right: padding),
+  p-v:   (padding-top: padding, padding-bottom: padding),
+  p-t:   (padding-top: padding),
+  p-b:   (padding-bottom: padding),
+  p-l:   (padding-left: padding),
+  p-r:   (padding-right: padding),
+
+  // MARGIN
+  m:     (margin: margin),
+  m-h:   (margin-left: margin, margin-right: margin),
+  m-v:   (margin-top: margin, margin-bottom: margin),
+  m-t:   (margin-top: margin),
+  m-b:   (margin-bottom: margin),
+  m-l:   (margin-left: margin),
+  m-r:   (margin-right: margin)
+);
+
+$justifications: (
+  start: flex-start,
+  end: flex-end,
+  center: center,
+  between: space-between,
+  around: space-around
+);
+
+// MARK: Mixins
+@mixin apply-props($props, $value) {
+  @each $prop, $type in $props {
+    #{$prop}: $value;
+  }
+}
+
+@mixin generate-utility($class, $size-key, $value) {
+  $props: map-get($spacing-rules, $class);
+
+  .#{$class}-#{$size-key} {
+    @include apply-props($props, $value);
+  }
+}
+
+
+// =======================================
+// Generator Loop
+// =======================================
+@each $size-key, $value in $gaps {
+
+  // Build all utilities from the map
+  @each $class, $properties in $spacing-rules {
+    @include generate-utility($class, $size-key, $value);
+  }
+}
+
+// MARK: Layout Classes
+.flex {
+  display: flex;
+
+  &.row {
+    flex-direction: row;
+
+    &.wrap {
+      flex-wrap: wrap;
+    }
+  }
+
+  &.column {
+    flex-direction: column;
+  }
+
+  @each $name, $justifications in $justifications {
+    &.jc-#{$name} {
+      justify-content: $justifications;
+    }
+
+    &.ai-#{$name} {
+      align-items: $justifications;
+    }
+
+    &.as-#{$name} {
+      align-self: $justifications;
+    }
+  }
+
+  .grow {
+    flex-grow: 1;
+  }
+}

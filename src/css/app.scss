@@ -1,0 +1,11 @@
+@import 'reset';
+@import '_layout';
+
+:root {
+  --u-color-secondary: rgb(148, 75, 75);
+  --u-link-color-on-secondary: rgb(255, 223, 223);
+}
+
+.app {
+  min-height: 100vh;
+}
